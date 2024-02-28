@@ -3,3 +3,6 @@
 app_register:
     path: /register
     controller: App\Controller\RegistrationController::register
+app_lucky_number:
+    path: /lucky/number
+    controller: App\Controller\LuckyController::number

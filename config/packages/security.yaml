@@ -16,3 +16,7 @@ security:
             form_login:
                 provider: app_user_provider
                 # ...
+
+    access_control:
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+            - { path: ^/users, roles: ROLE_USER }
