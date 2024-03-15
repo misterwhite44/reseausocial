@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .profile-info {
+            margin-bottom: 20px;
+        }
+        .profile-info label {
+            font-weight: bold;
+        }
+        .logout-button {
+            text-align: center;
+        }
+        .logout-button button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .logout-button button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Mon Profil</h2>
+    <div class="profile-info">
+        <label for="username">Nom d'utilisateur :</label>
+        <p id="username">JohnDoe</p>
+    </div>
+    <div class="profile-info">
+        <label for="email">Adresse e-mail :</label>
+        <p id="email">johndoe@example.com</p>
+    </div>
+    <div class="profile-info">
+        <label for="bio">Biographie :</label>
+        <p id="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel urna nec urna dignissim posuere.</p>
+    </div>
+    <div class="logout-button">
+        <button onclick="logout()">Se déconnecter</button>
+    </div>
+</div>
+<script>
+    function logout() {
+        // Code pour la déconnexion de l'utilisateur
+        // Vous pouvez implémenter ici la fonctionnalité de déconnexion en utilisant AJAX ou tout autre méthode appropriée.
+        alert('Vous avez été déconnecté avec succès.');
+        // Rediriger vers la page de connexion après la déconnexion
+        window.location.href = "/login";
+    }
+</script>
+</body>
+</html>
