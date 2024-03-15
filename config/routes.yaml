@@ -1,8 +1,9 @@
-# config/routes.yaml
-
 app_register:
     path: /register
     controller: App\Controller\RegistrationController::register
 app_lucky_number:
     path: /lucky/number
     controller: App\Controller\LuckyController::number
+app_inscription:
+    path: lucky/inscription
+    controller: App\Controller\InscriptionController::number
