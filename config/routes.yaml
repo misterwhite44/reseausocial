@@ -7,3 +7,6 @@ app_lucky_number:
 app_inscription:
     path: lucky/inscription
     controller: App\Controller\InscriptionController::number
+app_profil:
+    path: lucky/profil
+    controller: App\Controller\ProfilController::number
