@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion au Réseau Social</title>
+    <title>Inscription au Réseau Social</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,7 +29,8 @@
             margin-bottom: 10px;
         }
         input[type="text"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="email"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
@@ -62,17 +63,21 @@
 </head>
 <body>
 <div class="top-right">
-    <a href="inscription.html.twig">S'inscrire</a>
-    <a href="#">Se connecter</a>
+    <a href="#">S'inscrire</a>
+    <a href="number.html.twig">Se connecter</a>
 </div>
 <div class="container">
-    <h2>Connexion au Réseau Social</h2>
-    <form action="/login" method="post">
+    <h2>Inscription au Réseau Social</h2>
+    <form action="/register" method="post">
         <label for="username">Nom d'utilisateur :</label>
         <input type="text" id="username" name="username" required>
+        <label for="email">Adresse e-mail :</label>
+        <input type="email" id="email" name="email" required>
         <label for="password">Mot de passe :</label>
         <input type="password" id="password" name="password" required>
-        <input type="submit" value="Se connecter">
+        <label for="confirm_password">Confirmer le mot de passe :</label>
+        <input type="password" id="confirm_password" name="confirm_password" required>
+        <input type="submit" value="S'inscrire">
     </form>
 </div>
 </body>
