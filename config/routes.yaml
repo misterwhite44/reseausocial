@@ -1,7 +1,7 @@
 app_register:
     path: /register
     controller: App\Controller\RegistrationController::register
-app_lucky_number:
+app_connexion:
     path: /lucky/number
     controller: App\Controller\LuckyController::number
 app_inscription:
