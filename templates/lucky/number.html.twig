@@ -62,12 +62,12 @@
 </head>
 <body>
 <div class="top-right">
-    <a href="inscription.html.twig">S'inscrire</a>
+    <a href="{{ path('app_inscription') }}">S'inscrire</a>
     <a href="#">Se connecter</a>
 </div>
 <div class="container">
     <h2>Connexion au Réseau Social</h2>
-    <form action="/login" method="post">
+    <form action="{{ path('app_profil') }}" method="post">
         <label for="username">Nom d'utilisateur :</label>
         <input type="text" id="username" name="username" required>
         <label for="password">Mot de passe :</label>
