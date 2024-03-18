@@ -10,3 +10,7 @@ app_inscription:
 app_profil:
     path: lucky/profil
     controller: App\Controller\ProfilController::number
+
+app_home:
+    path: /home
+    controller: App\Controller\HomeController::number

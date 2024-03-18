@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil du Réseau Social</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .post-form {
+            margin-bottom: 20px;
+        }
+        .post-form textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
+        .post-form button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        .post-form button:hover {
+            background-color: #0056b3;
+        }
+        .posts {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .post {
+            margin-bottom: 20px;
+        }
+        .post .user {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .post .content {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Accueil du Réseau Social</h1>
+        <div class="tabs">
+            <button><a href="accueil.html">Accueil</a></button>
+            <button><a href="explorer.html">Explorer</a></button>
+            <button><a href="notifications.html">Notifications</a></button>
+            <button><a href="{{ path('app_profil') }}">Profil</a></button>
+            <button><a href="deconnexion.html">Déconnexion</a></button>
+        </div>
+
+    </div>
+
+    <div class="post-form">
+        <textarea placeholder="Que voulez-vous partager aujourd'hui ?"></textarea>
+        <button>Publier</button>
+    </div>
+
+    <div class="posts">
+        <div class="post">
+            <div class="user">Utilisateur 1</div>
+            <div class="content">Contenu du premier post</div>
+        </div>
+        <div class="post">
+            <div class="user">Utilisateur 2</div>
+            <div class="content">Contenu du deuxième post</div>
+        </div>
+        <!-- Ajoutez plus de publications ici -->
+    </div>
+</div>
+</body>
+</html>
