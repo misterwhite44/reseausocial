@@ -36,6 +36,13 @@
             border: 1px solid #ccc;
             resize: none;
         }
+        .post-form input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
         .post-form button {
             padding: 8px 16px;
             border: none;
@@ -60,7 +67,15 @@
             font-weight: bold;
             margin-bottom: 5px;
         }
+        .post .title {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
         .post .content {
+            margin-bottom: 10px;
+        }
+        .post .description {
+            color: #666;
             margin-bottom: 10px;
         }
     </style>
@@ -76,25 +91,29 @@
             <button><a href="{{ path('app_profil') }}">Profil</a></button>
             <button><a href="deconnexion.html">Déconnexion</a></button>
         </div>
-
     </div>
 
     <div class="post-form">
-        <textarea placeholder="Que voulez-vous partager aujourd'hui ?"></textarea>
-        <button>Publier</button>
+        <form action="{{ path('app_home') }}" method="post">
+            <input type="text" id="postTitle" name="postTitle" placeholder="Titre du post">
+            <textarea id="postContent" name="postContent" placeholder="Que voulez-vous partager aujourd'hui ?"></textarea>
+            <input type="text" id="postDescription" name="postDescription" placeholder="Description du post">
+            <button type="submit">Publier</button>
+        </form>
     </div>
 
     <div class="posts">
+    {% for publication in publications %}
         <div class="post">
-            <div class="user">Utilisateur 1</div>
-            <div class="content">Contenu du premier post</div>
+            <h2 class="title">{{ publication.getTitre() }}</h2>
+            <div class="user">Utilisateur</div>
+            <div class="content">{{ publication.getDescription() }}</div>
+            <p class="description">{{ publication.getDescription() }}</p> {# Utilisation de getDescription() pour récupérer la description #}
         </div>
-        <div class="post">
-            <div class="user">Utilisateur 2</div>
-            <div class="content">Contenu du deuxième post</div>
-        </div>
-        <!-- Ajoutez plus de publications ici -->
-    </div>
+    {% endfor %}
 </div>
+
+</div>
+
 </body>
 </html>
