@@ -22,6 +22,9 @@ class User
     #[ORM\Column(length: 50)]
     private ?string $Password = null;
 
+    #[ORM\OneToOne(mappedBy: 'IDUser', cascade: ['persist', 'remove'])]
+    private ?Commentaire $Yes = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,23 @@ class User
     public function setPassword(string $Password): static
     {
         $this->Password = $Password;
+
+        return $this;
+    }
+
+    public function getYes(): ?Commentaire
+    {
+        return $this->Yes;
+    }
+
+    public function setYes(Commentaire $Yes): static
+    {
+        // set the owning side of the relation if necessary
+        if ($Yes->getIDUser() !== $this) {
+            $Yes->setIDUser($this);
+        }
+
+        $this->Yes = $Yes;
 
         return $this;
     }
