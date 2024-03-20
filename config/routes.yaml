@@ -15,4 +15,12 @@ app_home:
     controller: App\Controller\HomeController::number
     methods: ['GET', 'POST']
 
+app_comment:
+    path: /comment
+    controller: App\Controller\CommentController::commentPage
+    methods: ['GET', 'POST']
 
+app_select_comment:
+    path: /select_comment
+    controller: App\Controller\SelectCommentController::selectComment
+    methods: ['GET', 'POST']
