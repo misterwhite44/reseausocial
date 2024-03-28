@@ -25,6 +25,11 @@ class User
     #[ORM\OneToOne(mappedBy: 'IDUser', cascade: ['persist', 'remove'])]
     private ?Commentaire $Yes = null;
 
+    #[ORM\Column(length: 101, nullable: true)]
+    private ?string $bio = null;
+
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -82,4 +87,25 @@ class User
 
         return $this;
     }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): static
+    {
+        $this->bio = $bio;
+
+        return $this;
+    }
+
+
+
+    
+
+
+
+
+
 }

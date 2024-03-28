@@ -28,16 +28,20 @@ class InscriptionController extends AbstractController
             $pseudo = $request->request->get('username');
             $email = $request->request->get('email');
             $password = $request->request->get('password');
+            $bio = $request->request->get('bio');
+
 
             // Créer une nouvelle instance de l'entité User et définir les données
             $user = new User();
             $user->setPseudo($pseudo);
             $user->setEmail($email);
             $user->setPassword($password);
+            $user->setBio($bio);
 
             // Persister l'utilisateur dans la base de données
             $this->entityManager->persist($user);
             $this->entityManager->flush();
+
 
             // Rediriger l'utilisateur vers une autre page après l'inscription
             return $this->redirectToRoute('app_connexion');

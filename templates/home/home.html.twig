@@ -78,16 +78,20 @@
             color: #666;
             margin-bottom: 10px;
         }
+
+
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
         <h1>Accueil du Réseau Social</h1>
+        <form class="search-form" action="{{ path('app_profil') }}" method="get">
+            <input type="text" id="searchInput" name="q" placeholder="Rechercher..." onkeypress="handleKeyPress(event)">
+        </form>
+        </form>
         <div class="tabs">
             <button><a href="accueil.html">Accueil</a></button>
-            <button><a href="explorer.html">Explorer</a></button>
-            <button><a href="notifications.html">Notifications</a></button>
             <button><a href="{{ path('app_profil') }}">Profil</a></button>
             <button><a href="deconnexion.html">Déconnexion</a></button>
         </div>
