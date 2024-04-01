@@ -14,53 +14,76 @@ class Commentaire
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $commentaire = null;
+    #[ORM\Column(length: 2200)]
+    private ?string $texte = null;
 
-    #[ORM\OneToOne(inversedBy: 'Yes', cascade: ['persist', 'remove'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $date = null;
+
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $IDUser = null;
+    private ?Post $post_id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commentaires')]
-    private ?Publication $IdPublication = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Compte $compte_id = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCommentaire(): ?string
+    public function setId(int $id): static
     {
-        return $this->commentaire;
-    }
-
-    public function setCommentaire(?string $commentaire): static
-    {
-        $this->commentaire = $commentaire;
+        $this->id = $id;
 
         return $this;
     }
 
-    public function getIDUser(): ?User
+    public function getTexte(): ?string
     {
-        return $this->IDUser;
+        return $this->texte;
     }
 
-    public function setIDUser(User $IDUser): static
+    public function setTexte(string $texte): static
     {
-        $this->IDUser = $IDUser;
+        $this->texte = $texte;
 
         return $this;
     }
 
-    public function getIdPublication(): ?Publication
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->IdPublication;
+        return $this->date;
     }
 
-    public function setIdPublication(?Publication $IdPublication): static
+    public function setDate(\DateTimeInterface $date): static
     {
-        $this->IdPublication = $IdPublication;
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function getPostId(): ?Post
+    {
+        return $this->post_id;
+    }
+
+    public function setPostId(?Post $post_id): static
+    {
+        $this->post_id = $post_id;
+
+        return $this;
+    }
+
+    public function getCompteId(): ?Compte
+    {
+        return $this->compte_id;
+    }
+
+    public function setCompteId(?Compte $compte_id): static
+    {
+        $this->compte_id = $compte_id;
 
         return $this;
     }
