@@ -1,26 +1,5 @@
-app_register:
-    path: /register
-    controller: App\Controller\RegistrationController::register
-app_connexion:
-    path: /lucky/number
-    controller: App\Controller\LuckyController::number
-app_inscription:
-    path: lucky/inscription
-    controller: App\Controller\InscriptionController::number
-app_profil:
-    path: lucky/profil
-    controller: App\Controller\ProfilController::number
-app_home:
-    path: /home
-    controller: App\Controller\HomeController::number
-    methods: ['GET', 'POST']
-
-app_comment:
-    path: /comment
-    controller: App\Controller\CommentController::commentPage
-    methods: ['GET', 'POST']
-
-app_select_comment:
-    path: /select_comment
-    controller: App\Controller\SelectCommentController::selectComment
-    methods: ['GET', 'POST']
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
