@@ -7,6 +7,18 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+#[ApiResource(
+        operations: [
+            new Get(normalizationContext: ['groups' => 'compte:item']),
+            new GetCollection(normalizationContext: ['groups' => 'compte:list'])
+       ],
+    paginationEnabled: false,
+)]
 
 #[ORM\Entity(repositoryClass: CompteRepository::class)]
 class Compte implements UserInterface, PasswordAuthenticatedUserInterface
@@ -14,39 +26,60 @@ class Compte implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['compte:list', 'compte:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['compte:list', 'compte:item'])]
+
     private ?string $username = null;
 
     #[ORM\Column]
+    #[Groups(['compte:list', 'compte:item'])]
+
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['compte:list', 'compte:item'])]
+
     private ?string $password = null;
 
     #[ORM\ManyToOne]
+    #[Groups(['compte:list', 'compte:item'])]
+
     private ?Photo $photo_id = null;
 
     #[ORM\ManyToOne]
+    #[Groups(['compte:list', 'compte:item'])]
+
     private ?Etablissement $etablissement_id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['compte:list', 'compte:item'])]
+
     private ?string $biographie = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['compte:list', 'compte:item'])]
+
     private ?\DateTimeInterface $dernier_goldden_like = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['compte:list', 'compte:item'])]
+
     private ?string $email = null;
 
     #[ORM\Column(length: 30, nullable: true)]
+    #[Groups(['compte:list', 'compte:item'])]
+
     private ?string $nom_affichage = null;
 
     #[ORM\Column]
+    #[Groups(['compte:list', 'compte:item'])]
+
     private ?bool $suspendu = null;
 
     public function getId(): ?int
