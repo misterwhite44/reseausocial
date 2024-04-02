@@ -67,6 +67,13 @@
                 color: #333;
                 margin-left: 20px;
             }
+
+            #search-button {
+                width: 150px;
+                height: 50px;
+
+            }
+
         </style>
     {% endblock %}
 
@@ -86,8 +93,8 @@
 
         <form class="w-25" action="{{ path('app_search') }}">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Rechercher..." aria-label="Rechercher..." name="search" id="search-bar">
-                <button class="btn btn-outline-secondary" type="submit" id="search-button"><i class="fa-solid fa-magnifying-glass"></i> Rechercher</button>
+                <input type="text" class="form-control" placeholder="Search" aria-label="Search" name="search" id="search-bar">
+                <button class="btn btn-Success" type="submit" id="search-button"><i class="fa-solid fa-magnifying-glass"></i> Rechercher</button>
                 <button class="btn btn-outline-danger" type="button" id="clear-input" style="display: none"><i class="fa-solid fa-xmark"></i></button>
             </div>
         </form>
@@ -96,8 +103,8 @@
 
 
         <div>
-            <a href="{{ path('app_compte_show', {'id': app.user.id}) }}" class="btn btn-dark me-3"><i class="fa-solid fa-user"></i></a>
-            <a href="{{ path('app_logout') }}" class="btn btn-danger"><i class="fa-solid fa-right-from-bracket"></i></a>
+            <a href="{{ path('app_compte_show', {'id': app.user.id}) }}" class="btn btn-primary"><i class="fa-solid fa-user"></i></a>
+            <a href="{{ path('app_logout') }}" class="btn btn-warning"><i class="fa-solid fa-right-from-bracket"></i></a>
         </div>
     {% endif %}
 
