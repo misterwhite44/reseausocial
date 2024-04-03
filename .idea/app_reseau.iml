@@ -135,6 +135,8 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea/copilot/chatSessions" />
       <excludeFolder url="file://$MODULE_DIR$/var" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/asset-mapper" />
+      <excludeFolder url="file://$MODULE_DIR$/public/bundles" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

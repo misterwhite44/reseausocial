@@ -5,29 +5,52 @@ namespace App\Entity;
 use App\Repository\PostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'post:item']),
+        new GetCollection(normalizationContext: ['groups' => 'post:list'])
+    ],
+    paginationEnabled: false,
+)]
 class Post
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['post:list', 'post:item'])]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 75, nullable: true)]
+    #[Groups(['post:list', 'post:item'])]
+
     private ?string $titre = null;
 
     #[ORM\Column(length: 2200, nullable: true)]
+    #[Groups(['post:list', 'post:item'])]
+
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['post:list', 'post:item'])]
+
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['post:list', 'post:item'])]
+
     private ?\DateTimeInterface $temps_retard = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['post:list', 'post:item'])]
+
     private ?Compte $compte_id = null;
 
     public function getId(): ?int

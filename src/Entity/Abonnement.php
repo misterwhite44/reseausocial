@@ -4,26 +4,47 @@ namespace App\Entity;
 
 use App\Repository\AbonnementRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AbonnementRepository::class)]
+#[ApiResource(
+        operations: [
+            new Get(normalizationContext: ['groups' => 'abonnement:item']),
+            new GetCollection(normalizationContext: ['groups' => 'abonnement:list'])
+        ],
+    paginationEnabled: false,
+)]
 class Abonnement
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['abonnement:list', 'abonnement:item'])]
+
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['abonnement:list', 'abonnement:item'])]
+
     private ?compte $suiveur_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'abonnements')]
+    #[Groups(['abonnement:list', 'abonnement:item'])]
+
     private ?Compte $suivi_personne_id = null;
 
     #[ORM\ManyToOne]
+    #[Groups(['abonnement:list', 'abonnement:item'])]
+
     private ?Etablissement $suivi_etablissement_id = null;
 
     #[ORM\ManyToOne]
+    #[Groups(['abonnement:list', 'abonnement:item'])]
+
     private ?Hashtag $suivi_hashtag_id = null;
 
     public function getId(): ?int
