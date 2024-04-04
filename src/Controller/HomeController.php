@@ -184,7 +184,6 @@ class HomeController extends AbstractController
         ]);
     }
 
-
     #[Route('/add-comment/{id}', name: 'app_add_comment')]
     public function addComment(Request $request, EntityManagerInterface $em, Post $post): Response
     {
@@ -208,16 +207,15 @@ class HomeController extends AbstractController
             $em->flush();
 
             // Redirection vers la même page pour éviter les rechargements
-            return $this->redirectToRoute('app_add_comment', ['id' => $post->getId()]);
+            return $this->redirectToRoute('app_home', ['id' => $post->getId()]);
         }
 
         // Créer une nouvelle réponse avec le contenu du formulaire de commentaire
         return $this->render('home/add_commentaire.html.twig', [
             'commentaireForm' => $commentaireForm->createView(),
-            'post' => $post,
+            'post' => $post, // Passer le post à Twig
         ]);
     }
-
 
 
 
