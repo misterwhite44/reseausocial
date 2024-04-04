@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             new Get(normalizationContext: ['groups' => 'compte:item']),
             new GetCollection(normalizationContext: ['groups' => 'compte:list'])
        ],
+
     paginationEnabled: false,
 )]
 
@@ -27,6 +28,7 @@ class Compte implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['compte:list', 'compte:item'])]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
