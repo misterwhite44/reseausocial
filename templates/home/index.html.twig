@@ -35,9 +35,16 @@
                         <button type="button" class="btn btn-warning super-like-btn" data-post-id="{{ publication.id }}">
                             <i class="fas fa-star"></i> Super Like <span class="super-like-count">0</span>
                         </button>
-                        <button type="button" class="btn btn-info comment-btn" data-post-id="{{ publication.id }}">Commentaire</button>
+                        <button type="button" class="btn btn-info comment-btn" onclick="redirectToCommentPage({{ publication.id }})">Commentaire</button>
+
+                        <script>
+                            function redirectToCommentPage(postId) {
+                                window.location.href = "{{ path('app_add_comment', {'id': '__postId__'}) }}".replace('__postId__', postId);
+                            }
+                        </script>
                     </li>
                 {% endfor %}
+
             </ul>
         {% else %}
             <p class="lead">Aucune publication disponible.</p>
