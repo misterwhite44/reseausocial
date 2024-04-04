@@ -16,6 +16,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\ModifyPostType;
+use App\Entity\Commentaire;
+use App\Form\CommentaireType;
+
 
 
 
@@ -173,11 +176,49 @@ class HomeController extends AbstractController
         }
 
         // Le formulaire n'a pas encore été soumis ou n'est pas valide, afficher à nouveau le formulaire avec les erreurs
-        return $this->render('home/modif_commentaire.html.twig', [
+        return $this->render('home/modif_post.html.twig', [
             'form' => $form->createView(),
             'post' => $post, // Passer l'objet $post au modèle Twig
+
+
         ]);
     }
+
+
+    #[Route('/add-comment/{id}', name: 'app_add_comment')]
+    public function addComment(Request $request, EntityManagerInterface $em, Post $post): Response
+    {
+        // Créer une nouvelle instance de Commentaire
+        $commentaire = new Commentaire();
+
+        // Créer un formulaire pour ajouter un commentaire
+        $commentaireForm = $this->createForm(CommentaireType::class, $commentaire);
+        $commentaireForm->handleRequest($request);
+
+        // Vérifier si le formulaire a été soumis et est valide
+        if ($commentaireForm->isSubmitted() && $commentaireForm->isValid()) {
+            // Associer le commentaire à la publication actuelle
+            $commentaire->setPostId($post);
+
+            // Associer le commentaire à l'utilisateur connecté
+            $commentaire->setCompteId($this->getUser());
+
+            // Enregistrer le commentaire dans la base de données
+            $em->persist($commentaire);
+            $em->flush();
+
+            // Redirection vers la même page pour éviter les rechargements
+            return $this->redirectToRoute('app_add_comment', ['id' => $post->getId()]);
+        }
+
+        // Créer une nouvelle réponse avec le contenu du formulaire de commentaire
+        return $this->render('home/add_commentaire.html.twig', [
+            'commentaireForm' => $commentaireForm->createView(),
+            'post' => $post,
+        ]);
+    }
+
+
 
 
 }
