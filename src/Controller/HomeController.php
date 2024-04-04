@@ -15,6 +15,8 @@ use App\Entity\Etablissement;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Form\ModifyPostType;
+
 
 
 class HomeController extends AbstractController
@@ -151,5 +153,31 @@ class HomeController extends AbstractController
         // Rediriger l'utilisateur vers une page de confirmation ou une autre page appropriée
         return $this->redirectToRoute('app_home');
     }
+
+    #[Route('/modify-post/{id}', name:'app_modify_post')]
+
+    public function modifyPost(Request $request, EntityManagerInterface $em, Post $post): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        // Créer un formulaire pour modifier le post
+        $form = $this->createForm(ModifyPostType::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Les données soumises sont valides, enregistrez les modifications
+            $em->flush();
+
+            // Rediriger vers une autre page après la modification, par exemple la page d'accueil
+            return $this->redirectToRoute('app_home');
+        }
+
+        // Le formulaire n'a pas encore été soumis ou n'est pas valide, afficher à nouveau le formulaire avec les erreurs
+        return $this->render('home/modif_commentaire.html.twig', [
+            'form' => $form->createView(),
+            'post' => $post, // Passer l'objet $post au modèle Twig
+        ]);
+    }
+
 
 }
