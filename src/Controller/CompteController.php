@@ -38,6 +38,8 @@ class CompteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Associer l'établissement sélectionné au compte
+            $compte->setEtablissementId($form->get('etablissement_id')->getData());
 
             $compte->setUsername($compte->getUsername());
             $compte->setPassword($hasher->hashPassword($compte, $compte->getPassword()));
@@ -55,6 +57,7 @@ class CompteController extends AbstractController
             'form' => $form,
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_compte_show', methods: ['GET'])]
     public function show(Compte $compte, EntityManagerInterface $em): Response
