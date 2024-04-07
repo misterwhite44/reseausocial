@@ -8,6 +8,7 @@ use App\Entity\Signalement;
 use App\Entity\Photo;
 use App\Entity\Format;
 use App\Form\CompteType;
+use App\Entity\Post;
 use App\Repository\CompteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -249,6 +250,48 @@ class CompteController extends AbstractController
 
         return $this->redirectToRoute('app_compte_show', ['id' => $id]);
     }
+
+    #[Route('/{id}', name: 'app_compte_show', methods: ['GET'])]
+    public function montre(Compte $compte, EntityManagerInterface $em): Response
+    {
+        // Vérifier si le compte connecté est abonné au compte affiché uniquement si le compte n'est pas le sien
+        $user = $this->getUser();
+        $abonne = false;
+        $donneesPhoto = null;
+        $format = null;
+
+        // Je dois récupérer la photo de profil
+        $photo = $compte->getPhotoId();
+
+        if ($photo) {
+            $format = $photo->getFormatId();
+            $donneesPhoto = stream_get_contents($photo->getDonneesPhoto());
+        }
+
+        if ($user !== null && $compte !== $user) {
+            $abonnement = $em->getRepository(Abonnement::class)->findOneBy([
+                'suiveur_id' => $user,
+                'suivi_personne_id' => $compte
+            ]);
+
+            if ($abonnement !== null) {
+                // Si un abonnement est trouvé, alors le compte connecté est abonné au compte affiché
+                $abonne = true;
+            }
+        }
+
+        // Récupérer les publications de l'utilisateur connecté
+        $publications = $em->getRepository(Post::class)->findBy(['compte_id' => $user]);
+
+        return $this->render('compte/show.html.twig', [
+            'compte' => $compte,
+            'abonne' => $abonne,
+            'donneesPhoto' => $donneesPhoto != null ? base64_encode($donneesPhoto) : $donneesPhoto,
+            'format' => $format != null ? $format->getNom() : $format,
+            'publications' => $publications, // Passer les publications à la vue
+        ]);
+    }
+
 
 
 }

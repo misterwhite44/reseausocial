@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="container">
-        <h1>Créer une publication</h1>
+        <h1>Créer un retard</h1>
         <form action="{{ path('app_create_post') }}" method="post">
             <div class="form-group">
                 <label for="titre">Titre :</label>
@@ -21,7 +21,7 @@
 
         <br>
         <br>
-        <h1>Mes publications</h1>
+        <h1>Publications</h1>
         {% if publications %}
             <ul class="list-group">
                 {% for publication in publications %}
