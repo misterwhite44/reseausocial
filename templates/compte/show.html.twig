@@ -37,11 +37,16 @@
                         <h5 class="text-muted">Établissement:</h5>
                         <div class="card">
                             <div class="card-body">
-                                <h6 class="card-title">{{ compte.etablissementId.nom }}</h6>
-                                <p class="card-text text-muted">Localisation: {{ compte.etablissementId.pays }}, {{ compte.etablissementId.codePostal }}</p>
+                                {% if compte.etablissementId is not null %}
+                                    <h6 class="card-title">{{ compte.etablissementId.nom }}</h6>
+                                    <p class="card-text text-muted">Localisation: {{ compte.etablissementId.pays }}, {{ compte.etablissementId.codePostal }}</p>
+                                {% else %}
+                                    <p class="card-text text-muted">Pas d'établissement associé</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
+
 
 
                     <div class="flex items-center justify-between">
