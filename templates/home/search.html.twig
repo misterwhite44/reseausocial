@@ -35,7 +35,7 @@
                                     {% if compte.isSubscribed %}
                                         <a href='{{ path('app_unsubscribe', {'id': compte.getId()}) }}' class='btn btn-sm btn-danger'>Se désabonner</a>
                                     {% else %}
-                                        <a href='{{ path('app_subscribe', {'id': compte.getId()}) }}' class='btn btn-sm btn-dark'>S'abonner</a>
+                                        <a href='{{ path('app_subscribe', {'id': compte.getId()}) }}' class='btn btn-sm btn-primary'>S'abonner</a>
                                     {% endif %}
                                 {% endif %}
                             </div>
