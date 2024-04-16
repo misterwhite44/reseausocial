@@ -20,6 +20,14 @@ class PostRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Post::class);
     }
+    public function findOldestPost(): ?Post
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.date', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
 //    /**
 //     * @return Post[] Returns an array of Post objects
