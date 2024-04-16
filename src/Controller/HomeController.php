@@ -35,10 +35,12 @@ class HomeController extends AbstractController
 
         $publications = $em->getRepository(Post::class)->findBy([], ['date' => 'DESC']);
 
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'compte' => $compte,
             'publications' => $publications,
+
         ]);
     }
 
@@ -140,14 +142,26 @@ class HomeController extends AbstractController
         // Récupérer les données soumises
         $titre = $request->request->get('titre');
         $description = $request->request->get('description');
+        $dureeRetard = $request->request->get('duree_retard'); // Récupérer la durée du retard depuis le formulaire
 
+        // Créer une nouvelle publication
         // Créer une nouvelle publication
         $post = new Post();
         $post->setTitre($titre);
         $post->setDescription($description);
         $post->setDate(new \DateTime());
-        $post->setTempsRetard(new \DateTime());
+
+// Ajouter la durée du retard à l'heure actuelle
+        $dureeRetard = $request->request->get('duree_retard');
+        $tempsRetard = new \DateTime();
+        $tempsRetard->add(new \DateInterval('PT' . $dureeRetard . 'M')); // 'PT' indique une période de temps, 'M' indique des minutes
+
+        $post->setTempsRetard($tempsRetard);
         $post->setCompteId($this->getUser());
+
+
+
+
 
         // Enregistrer la publication
         $em->persist($post);
@@ -156,6 +170,7 @@ class HomeController extends AbstractController
         // Rediriger l'utilisateur vers une page de confirmation ou une autre page appropriée
         return $this->redirectToRoute('app_home');
     }
+
 
     #[Route('/modify-post/{id}', name:'app_modify_post')]
 
@@ -216,6 +231,21 @@ class HomeController extends AbstractController
             'post' => $post, // Passer le post à Twig
         ]);
     }
+
+    #[Route('/like/{id}', name: 'app_like_post')]
+    public function likePost(Request $request, EntityManagerInterface $em, Post $post): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        // Récupérer l'utilisateur actuel
+        $user = $this->getUser();
+
+        // Ajouter la logique pour enregistrer le like dans la base de données
+
+        // Retourner une réponse JSON indiquant le succès de l'opération
+        return new JsonResponse(['success' => true]);
+    }
+
 
 
 

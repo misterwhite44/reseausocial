@@ -15,6 +15,9 @@
                 <textarea id="description" name="description" class="form-control"></textarea>
                 <label for="#">Choisir un #</label>
                 <textarea id="#" name="#" class="form-control"></textarea>
+                <label for="duree_retard">Durée du retard (en minutes) :</label>
+                <input type="number" id="duree_retard" name="duree_retard" class="form-control">
+
             </div>
             <button type="submit" class="btn btn-primary">Créer</button>
         </form>
@@ -28,6 +31,7 @@
                     <li class="list-group-item">
                         <h4>{{ publication.titre }}</h4>
                         <p>{{ publication.description }}</p>
+                        <p>Durée du retard : {{ publication.tempsRetard|date('H:i') }}</p>
                         <a href="{{ path('app_modify_post', {'id': publication.id}) }}" class="btn btn-primary">Modifier</a>
                         <button type="button" class="btn btn-success like-btn" data-post-id="{{ publication.id }}">
                             <i class="fas fa-thumbs-up"></i> Like <span class="like-count">0</span>
@@ -37,21 +41,9 @@
                         </button>
                         <button type="button" class="btn btn-info comment-btn" onclick="redirectToCommentPage({{ publication.id }})">Commentaire</button>
                         <label for="commentaire">Commentaire :</label>
-                        <textarea id="commentaire" name="commentaire" class="form-control">
-
-</textarea>
-
-                        </textarea>
-
-
-                        <script>
-                            function redirectToCommentPage(postId) {
-                                window.location.href = "{{ path('app_add_comment', {'id': '__postId__'}) }}".replace('__postId__', postId);
-                            }
-                        </script>
+                        <textarea id="commentaire" name="commentaire" class="form-control"></textarea>
                     </li>
                 {% endfor %}
-
             </ul>
         {% else %}
             <p class="lead">Aucune publication disponible.</p>

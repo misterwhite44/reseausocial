@@ -9,6 +9,7 @@ use App\Entity\Photo;
 use App\Entity\Format;
 use App\Form\CompteType;
 use App\Entity\Post;
+use App\Entity\Etablissement;
 use App\Repository\CompteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -294,6 +295,38 @@ class CompteController extends AbstractController
             'publications' => $publications, // Passer les publications à la vue
         ]);
     }
+
+    // Route pour afficher les établissements et permettre l'association
+    #[Route('/associate/{id}', name: 'app_etablissement_associate', methods: ['GET', 'POST'])]
+    public function associateEtablissement(Request $request, Compte $compte, EntityManagerInterface $em): Response
+    {
+        // Récupérer tous les établissements
+        $etablissements = $em->getRepository(Etablissement::class)->findAll();
+
+        // Gérer la soumission du formulaire
+        if ($request->isMethod('POST')) {
+            // Récupérer l'ID de l'établissement sélectionné
+            $etablissementId = $request->request->get('etablissement');
+
+            // Récupérer l'établissement à partir de son ID
+            $etablissement = $em->getRepository(Etablissement::class)->find($etablissementId);
+
+            // Associer l'établissement au compte
+            $compte->setEtablissementId($etablissement);
+
+            $em->flush();
+
+            // Rediriger vers la page de profil du compte
+            return $this->redirectToRoute('app_compte_show', ['id' => $compte->getId()]);
+        }
+
+        // Afficher la vue avec la liste des établissements et le formulaire d'association
+        return $this->render('compte/associate.html.twig', [
+            'compte' => $compte,
+            'etablissements' => $etablissements, // Passer la variable 'etablissements' à la vue
+        ]);
+    }
+
 
 
 

@@ -6,7 +6,7 @@
     <div class="w-75">
         {{ form_row(form.etablissement_id) }}
     </div>
-    <a href="{{ path('app_etablissement_new') }}" class="btn btn-dark w-25">Nouveau</a>
+    <a href="{{ path('app_etablissement_new') }}" class="btn btn-primary">Nouveau</a>
 </div>
 
 {{ form_row(form.username) }}
@@ -15,7 +15,7 @@
 {{ form_row(form.password) }}
 {{ form_row(form.biographie) }}
 
-<button class="btn btn-dark w-full">{{ button_label|default("S'inscrire") }}</button>
+<button class="btn btn-primary">{{ button_label|default("S'inscrire") }}</button>
 
 <div>
     {% if app.request.attributes.get('_route') == 'app_compte_new' %}
