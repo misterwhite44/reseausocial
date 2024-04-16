@@ -89,4 +89,26 @@ class ApiController extends AbstractController
         // Return the count as JSON response
         return $this->json($count);
     }
+
+    //oldestpost
+    #[Route('/GetOldestPost', name: 'app_api_oldestpost', methods: ['POST'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Successful response',
+        content: new OA\JsonContent(
+            type: 'object'
+        )
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new Model(type: Periode_DTO::class),
+    )]
+    public function GetOldestPost(Periode_DTO $periode_DTO): Response
+    {
+        // Fetch the oldest Post entity
+        $oldestPost = $this->postRepository->findOldestPost();
+
+        // Return the oldest Post as JSON response
+        return $this->json($oldestPost);
+    }
 }
