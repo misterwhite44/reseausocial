@@ -4,18 +4,23 @@
 
 {% block body %}
     <div class="container mt-5">
+
         <div class="w-full d-flex items-center justify-center gap-5">
+
             <div style="width: 200px; height: 200px">
+
                 {% if donneesPhoto %}
                     <img src="data:image/{{ format }};base64,{{ donneesPhoto }}" alt="Photo de profil" width="200" height="200" class="rounded-circle border border-dark">
                 {% else %}
                     <div class="rounded-circle bg-secondary" style="width: 200px; height: 200px;"></div>
                 {% endif %}
+
             </div>
 
             <div class="flex items-center justify-center w-75">
                 {% if compte is not null %}
                     <h2>{{ compte.nomAffichage }}</h2>
+
                     <div class="d-flex justify-between items-center w-full">
                         <h5 class="font-weight-light">@{{ compte.username }}</h5>
                         {# Il faut pouvoir modifier le compte seulement si c'est le sien #}
@@ -30,30 +35,37 @@
                     <p>{{ compte.biographie }}</p>
                     <div class="mt-3">
                         <h5 class="text-muted">Établissement:</h5>
-                        {% if compte.etablissementId is not null %}
-                            <div class="card">
-                                <div class="card-body">
+                        <div class="card">
+                            <div class="card-body">
+                                {% if compte.etablissementId is not null %}
                                     <h6 class="card-title">{{ compte.etablissementId.nom }}</h6>
                                     <p class="card-text text-muted">Localisation: {{ compte.etablissementId.pays }}, {{ compte.etablissementId.codePostal }}</p>
-                                </div>
+                                {% else %}
+                                    <p class="card-text text-muted">Pas d'établissement associé</p>
+                                {% endif %}
                             </div>
-                        {% else %}
-                            <p class="text-muted">Aucun établissement associé.</p>
-                        {% endif %}
+                        </div>
                     </div>
 
+
+
                     <div class="flex items-center justify-between">
+
                         <div class="flex items-center justify-center">
+
                             {% if app.user is not null and app.user.id != compte.id %}
+
                                 {% if abonne %}
                                     <a href="{{ path('app_unsubscribe', {'id': compte.id}) }}" class="btn btn-sm btn-danger">Se désabonner</a>
                                 {% else %}
                                     <a href="{{ path('app_subscribe', {'id': compte.id}) }}" class="btn btn-sm btn-primary">S'abonner</a>
                                 {% endif %}
+
                             {% endif %}
 
                             <a href="{{ path('app_compte_abonnements', {'id': compte.id}) }}" class="btn btn-primary">Abonnements</a>
-                            <a href="{{ path('app_etablissement_associate', {'id': compte.id}) }}" class="btn btn-success">Associer un établissement</a>
+                            <a href="{{ path('app_etablissement_associate', {'id': compte.id}) }}" class="btn btn-success">associate</a>
+
 
                             {# Le bouton de signalement ne doit pas être affiché sur le profil de l'utilisateur connecté #}
                             {% if app.user is not null and app.user.id != compte.id %}
@@ -61,36 +73,41 @@
                                     <i class="fa-solid fa-flag"></i>
                                 </button>
                             {% endif %}
-                        </div>
-                    </div>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Signaler le compte</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form action="{{ path('app_compte_signaler', {'id': compte.id}) }}">
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label for="exampleFormControlInput1" class="form-label">Raison du Signalement</label>
-                                            <textarea name="reportArea" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Écrivez ici..."></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                        <button type="submit" class="btn btn-danger">Signaler</button>
-                                    </div>
-                                </form>
-                            </div>
                         </div>
+
                     </div>
 
                 {% else %}
                     <p>Compte non trouvé.</p>
                 {% endif %}
+
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Signaler le compte</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="{{ path('app_compte_signaler', {'id': compte.id}) }}">
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">Raison du Signalement</label>
+                                        <textarea name="reportArea" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Écrivez ici..."></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                    <button type="submit" class="btn btn-danger">Signaler</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -110,5 +127,9 @@
         {% else %}
             <h6 class="text-center text-secondary font-weight-light">Aucune publication pour le moment.</h6>
         {% endif %}
+
+        <h6 class="text-center text-secondary font-weight-light">Aucune publication pour le moment.</h6>
+
     </div>
+
 {% endblock %}
