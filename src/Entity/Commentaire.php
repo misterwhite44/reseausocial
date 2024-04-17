@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CommentaireRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
@@ -48,6 +50,14 @@ class Commentaire
     #[Groups(['commentaire:list', 'commentaire:item'])]
 
     private ?Compte $compte_id = null;
+
+    #[ORM\OneToMany(mappedBy: 'CommentaireId', targetEntity: Post::class)]
+    private Collection $posts;
+
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +115,36 @@ class Commentaire
     public function setCompteId(?Compte $compte_id): static
     {
         $this->compte_id = $compte_id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $post): static
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts->add($post);
+            $post->setCommentaireId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Post $post): static
+    {
+        if ($this->posts->removeElement($post)) {
+            // set the owning side to null (unless already changed)
+            if ($post->getCommentaireId() === $this) {
+                $post->setCommentaireId(null);
+            }
+        }
 
         return $this;
     }
