@@ -39,9 +39,8 @@
                         <button type="button" class="btn btn-warning super-like-btn" data-post-id="{{ publication.id }}">
                             <i class="fas fa-star"></i> Super Like <span class="super-like-count">0</span>
                         </button>
-                        <button type="button" class="btn btn-info comment-btn" onclick="redirectToCommentPage({{ publication.id }})">Commentaire</button>
-                        <label for="commentaire">Commentaire :</label>
-                        <textarea id="commentaire" name="commentaire" class="form-control"></textarea>
+                        <a href="{{ path('app_add_comment', {'id': publication.id}) }}" class="btn btn-info comment-btn">Commentaire</a>
+
                     </li>
                 {% endfor %}
             </ul>
