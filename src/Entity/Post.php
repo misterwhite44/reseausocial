@@ -53,17 +53,15 @@ class Post
 
     private ?Compte $compte_id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'posts')]
-    private ?Commentaire $commentaire = null;
-
-    public function getCommentaire(): ?Commentaire
+    public function getId(): ?int
     {
-        return $this->commentaire;
+        return $this->id;
     }
 
-    public function setCommentaire(?Commentaire $commentaire): static
+    public function setId(int $id): static
     {
-        $this->commentaire = $commentaire;
+        $this->id = $id;
+
         return $this;
     }
 
@@ -123,18 +121,6 @@ class Post
     public function setCompteId(?Compte $compte_id): static
     {
         $this->compte_id = $compte_id;
-
-        return $this;
-    }
-
-    public function getCommentaireId(): ?Commentaire
-    {
-        return $this->CommentaireId;
-    }
-
-    public function setCommentaireId(?Commentaire $CommentaireId): static
-    {
-        $this->CommentaireId = $CommentaireId;
 
         return $this;
     }

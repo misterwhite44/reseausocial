@@ -40,9 +40,6 @@ class CompteRepository extends ServiceEntityRepository implements PasswordUpgrad
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
-//compte qui post des posts le plus avec le nom de methode dans api controller GetCompteWithMostPosts
-
-
 
 
 

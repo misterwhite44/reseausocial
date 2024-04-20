@@ -232,7 +232,6 @@ class HomeController extends AbstractController
         ]);
     }
 
-
     #[Route('/like/{id}', name: 'app_like_post')]
     public function likePost(Request $request, EntityManagerInterface $em, Post $post): Response
     {
