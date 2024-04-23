@@ -248,10 +248,17 @@ class HomeController extends AbstractController
         // Récupérer l'utilisateur actuel
         $user = $this->getUser();
 
-        // Ajouter la logique pour enregistrer le like dans la base de données
+        // Créer une instance de Like
+        $like = new Like();
+        $like->setPostId($post);
+        $like->setCompteId($user);
+        // Enregistrer le like dans la base de données
+        $em->persist($like);
+        $em->flush();
 
-        // Retourner une réponse JSON indiquant le succès de l'opération
-        return new JsonResponse(['success' => true]);
+        // Retourner une réponse JSON indiquant le succès de l'opération et le nombre total de likes
+        $likesCount = count($post->getLikes());
+        return new JsonResponse(['success' => true, 'likesCount' => $likesCount]);
     }
     #[Route('/post/{id}/comments', name: 'app_show_comments')]
     public function showComments(EntityManagerInterface $em, Post $post): Response

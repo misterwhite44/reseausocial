@@ -111,4 +111,26 @@ class ApiController extends AbstractController
         // Return the oldest Post as JSON response
         return $this->json($oldestPost);
     }
+    //je veux l'affichage de tout les comptes
+
+    #[Route('/GetAllCompte', name: 'app_api_allcompte', methods: ['POST'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Successful response',
+        content: new OA\JsonContent(
+            type: 'object'
+        )
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new Model(type: Periode_DTO::class),
+    )]
+    public function GetAllCompte(Periode_DTO $periode_DTO): Response
+    {
+        // Fetch all Compte entities
+        $allCompte = $this->compteRepository->findAll();
+
+        // Return all Compte as JSON response
+        return $this->json($allCompte);
+    }
 }
