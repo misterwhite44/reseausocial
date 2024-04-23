@@ -62,53 +62,43 @@ class HomeController extends AbstractController
 
         $search = $request->query->get('search');
 
-
+        // Récupérer les comptes
         $comptes = $em->getRepository(Compte::class)->createQueryBuilder('c')
             ->where('c.username LIKE :search')
             ->setParameter('search', '%' . $search . '%')
             ->getQuery()
             ->getResult();
 
-        foreach ($comptes as $compte) {
-            $photo = $compte->getPhotoId();
-            if ($photo) {
-                $compte->photo = [
-                    'donneesPhoto' => base64_encode(stream_get_contents($photo->getDonneesPhoto())),
-                    'format' => $photo->getFormatId()->getNom(),
-                ];
-            } else {
-                $compte->photo = null;
-            }
-
-            $isSubscribed = $em->getRepository(Abonnement::class)->findOneBy([
-                'suiveur_id' => $this->getUser(),
-                'suivi_personne_id' => $compte
-            ]);
-
-            // Ajouter une nouvelle propriété à chaque compte pour indiquer s'il est abonné
-            $compte->isSubscribed = $isSubscribed ? true : false;
-        }
-
+        // Récupérer les hashtags
         $hashtags = $em->getRepository(Hashtag::class)->createQueryBuilder('h')
             ->where('h.texte LIKE :search')
             ->setParameter('search', '%' . $search . '%')
             ->getQuery()
             ->getResult();
 
+        // Récupérer les établissements
         $etablissements = $em->getRepository(Etablissement::class)->createQueryBuilder('e')
             ->where('e.nom LIKE :search')
             ->setParameter('search', '%' . $search . '%')
             ->getQuery()
             ->getResult();
 
+        // Récupérer les publications
+        $publications = $em->getRepository(Post::class)->createQueryBuilder('p')
+            ->where('p.titre LIKE :search OR p.description LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->getQuery()
+            ->getResult();
 
         return $this->render('home/search.html.twig', [
             'controller_name' => 'HomeController',
             'comptes' => $comptes,
             'hashtags' => $hashtags,
             'etablissements' => $etablissements,
+            'publications' => $publications, // Passer les publications au template Twig
         ]);
     }
+
 
 
     #[Route('/autocomplete', name: 'app_autocomplete', methods: ['GET'])]
@@ -302,6 +292,25 @@ class HomeController extends AbstractController
         // Répondre avec un message de succès
         return new Response('Signalement bien reçu.');
     }
+
+    #[Route('/delete-post/{id}', name: 'app_delete_post')]
+    public function deletePost(Request $request, EntityManagerInterface $em, Post $post): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        // Vérifiez si l'utilisateur a le droit de supprimer le post
+        if ($this->getUser() !== $post->getCompteId()) {
+            throw $this->createAccessDeniedException('Vous n\'avez pas le droit de supprimer ce post.');
+        }
+
+        // Supprimez le post de la base de données
+        $em->remove($post);
+        $em->flush();
+
+        // Redirigez l'utilisateur vers une page appropriée après la suppression
+        return $this->redirectToRoute('app_home');
+    }
+
 
 
 
