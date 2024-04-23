@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     paginationEnabled: false,
 )]
+
 class Post
 {
     #[ORM\Id]
@@ -41,6 +42,9 @@ class Post
     #[Groups(['post:list', 'post:item'])]
 
     private ?\DateTimeInterface $date = null;
+
+    private $post;
+
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['post:list', 'post:item'])]
