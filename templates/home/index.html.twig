@@ -32,6 +32,7 @@
                         <h4>{{ publication.titre }}</h4>
                         <p>{{ publication.description }}</p>
                         <p>Durée du retard : {{ publication.tempsRetard|date('H:i') }}</p>
+
                         <a href="{{ path('app_modify_post', {'id': publication.id}) }}" class="btn btn-primary">Modifier</a>
                         <button type="button" class="btn btn-success like-btn" data-post-id="{{ publication.id }}">
                             <i class="fas fa-thumbs-up"></i> Like <span class="like-count">0</span>
@@ -39,9 +40,21 @@
                         <button type="button" class="btn btn-warning super-like-btn" data-post-id="{{ publication.id }}">
                             <i class="fas fa-star"></i> Super Like <span class="super-like-count">0</span>
                         </button>
-                        <button type="button" class="btn btn-info comment-btn" onclick="redirectToCommentPage({{ publication.id }})">Commentaire</button>
-                        <label for="commentaire">Commentaire :</label>
-                        <textarea id="commentaire" name="commentaire" class="form-control"></textarea>
+                        <form action="{{ path('app_add_comment', {'id': publication.id}) }}" method="post">
+                            <label for="commentaire">Commentaire :</label>
+                            <textarea id="commentaire" name="commentaire" class="form-control"></textarea>
+                            <button type="submit" class="btn btn-primary">Ajouter un commentaire</button>
+                        </form>
+                        <form action="{{ path('app_signalement', {'id': publication.id}) }}" method="post">
+                            <label for="motif">Motif du signalement :</label>
+                            <textarea id="motif" name="motif" class="form-control"></textarea>
+                            <button type="submit" class="btn btn-warning super-like-btn" data-post-id="{{ publication.id }}">
+                                <i class="fas fa-star"></i> Signaler <span class="signalement-count">{{ signalementsCount[publication.id]|default(0) }}</span>
+                            </button>
+                        </form>
+
+
+
                     </li>
                 {% endfor %}
             </ul>

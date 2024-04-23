@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\ModifyPostType;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
+use App\Entity\Signalement;
+
 
 
 
@@ -27,22 +29,28 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher): Response
     {
-
         $this->denyAccessUnlessGranted('ROLE_USER');
-
 
         $compte = $this->getUser();
 
+        // Récupérer les publications
         $publications = $em->getRepository(Post::class)->findBy([], ['date' => 'DESC']);
 
+        // Récupérer le nombre de signalements pour chaque publication
+        $signalementsCount = [];
+        foreach ($publications as $publication) {
+            $signalements = $em->getRepository(Signalement::class)->findBy(['post_id' => $publication->getId()]);
+            $signalementsCount[$publication->getId()] = count($signalements);
+        }
 
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'compte' => $compte,
             'publications' => $publications,
-
+            'signalementsCount' => $signalementsCount, // Passer le nombre de signalements à Twig
         ]);
     }
+
 
 
     #[Route('/search', name: 'app_search')]
@@ -244,6 +252,48 @@ class HomeController extends AbstractController
 
         // Retourner une réponse JSON indiquant le succès de l'opération
         return new JsonResponse(['success' => true]);
+    }
+    #[Route('/post/{id}/comments', name: 'app_show_comments')]
+    public function showComments(EntityManagerInterface $em, Post $post): Response
+    {
+        // Récupère les commentaires liés au post spécifié
+        $comments = $em->getRepository(Commentaire::class)->findBy(['post_id' => $post]);
+
+        // Retourne une réponse avec les commentaires
+        return $this->render('home/index.html.twig', [
+            'post' => $post,
+            'comments' => $comments,
+        ]);
+    }
+    #[Route('/signalement/{id}', name: 'app_signalement')]
+    public function signalerPost(Request $request, EntityManagerInterface $em, Post $post): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        // Créer une instance de Signalement
+        $signalement = new Signalement();
+
+        // Récupérer l'utilisateur connecté comme signaleur
+        $signaleur = $this->getUser();
+
+        // Récupérer l'utilisateur ou l'entité qui a publié le post
+        $signale = $post->getCompteId();
+
+        // Récupérer le motif du signalement à partir des données soumises
+        $motif = $request->request->get('motif');
+
+        // Définir les attributs du signalement
+        $signalement->setMotif($motif);
+        $signalement->setSignaleurId($signaleur);
+        $signalement->setSignaleId($signale);
+        $signalement->setPostId($post);
+
+        // Ajouter le signalement à la base de données
+        $em->persist($signalement);
+        $em->flush();
+
+        // Répondre avec un message de succès
+        return new Response('Signalement bien reçu.');
     }
 
 
