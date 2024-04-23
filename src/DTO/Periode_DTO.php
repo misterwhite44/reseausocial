@@ -7,7 +7,7 @@ use OpenApi\Attributes as OA;
 class Periode_DTO
 {
     #[OA\Property(description: "Date de début")]
-    public string $dateDebut;
+    public \DateTime $dateDebut;
     #[OA\Property(description: "Date de fin")]
-    public string $dateFin;
+    public \DateTime $dateFin;
 }
