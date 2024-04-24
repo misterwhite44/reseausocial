@@ -230,32 +230,51 @@ class CompteController extends AbstractController
     }
 
     // Route pour signaler un compte
+
     #[Route('/signaler/{id}', name: 'app_compte_signaler', methods: ['GET'])]
     public function signaler($id, EntityManagerInterface $em, Request $request): Response
     {
         $compte = $em->getRepository(Compte::class)->find($id);
 
-        // Il faut ajouter un nouveau signalement
+        // Vérifier si le compte existe
+        if (!$compte) {
+            throw $this->createNotFoundException('Compte non trouvé');
+        }
+
+        // Créer un nouveau signalement
         $signalement = new Signalement();
         $signalement->setSignaleurId($this->getUser());
         $signalement->setSignaleId($compte);
 
-        $motif = $request->query->get('reportArea');
-        $signalement->setMotif($motif);
+        // Récupérer le motif du signalement depuis la requête
+        $motif = $request->query->get('motif');
 
-        $em->persist($signalement);
-        $em->flush();
+        // Vérifier si le motif est défini
+        if ($motif !== null) {
+            $signalement->setMotif($motif);
 
-        // On vérifie que le compte n'a pas eu 10 signalement sinon il faut le suspendre
-        $nbSignalements = count($em->getRepository(Signalement::class)->findBy(['signale_id' => $compte]));
-
-        if ($nbSignalements >= 10) {
-            $compte->setSuspendu(true);
+            // Enregistrer le signalement dans la base de données
+            $em->persist($signalement);
             $em->flush();
+
+            // Récupérer le nombre de signalements pour ce compte
+            $nbSignalements = count($compte->getSignalements());
+            $seuilSignalements = 10;
+
+            // Si le nombre de signalements dépasse le seuil, marquer le compte comme suspendu
+            if ($nbSignalements >= $seuilSignalements) {
+                $compte->setSuspendu(true);
+                $em->flush();
+            }
+        } else {
+            // Gérer le cas où le motif est null (optionnel)
+            // Vous pouvez ajouter une logique pour gérer ce cas selon vos besoins
         }
 
+        // Rediriger vers la page du compte signalé
         return $this->redirectToRoute('app_compte_show', ['id' => $id]);
     }
+
 
     #[Route('/{id}', name: 'app_compte_show', methods: ['GET'])]
     public function montre(Compte $compte, EntityManagerInterface $em): Response

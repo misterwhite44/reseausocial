@@ -85,6 +85,7 @@
                         </div>
                     </div>
                     <div class="profile-actions">
+
                         {% if app.user is not null and app.user.id != compte.id %}
                             {% if abonne %}
                                 <a href="{{ path('app_unsubscribe', {'id': compte.id}) }}" class="btn btn-danger">Se désabonner</a>
@@ -93,9 +94,12 @@
                             {% endif %}
                         {% endif %}
                         <a href="{{ path('app_compte_abonnements', {'id': compte.id}) }}" class="btn btn-primary">Abonnements</a>
-                        <a href="{{ path('app_compte_abonnements', {'id': compte.id}) }}" class="btn btn-success">Associate</a>
+                        <a href="{{ path('app_etablissement_associate', {'id': compte.id}) }}" class="btn btn-primary">Associer à un établissement</a>
                         {% if app.user is not null and app.user.id == compte.id %}
                             <a href="{{ path('app_compte_edit', {'id': compte.id}) }}" class="btn btn-primary">Modifier le profil</a>
+                        {% endif %}
+                        {% if app.user is not null and app.user.id != compte.id %}
+                            <a href="{{ path('app_compte_signaler', {'id': compte.id}) }}" class="btn btn-danger">Signaler</a>
                         {% endif %}
                     </div>
                 {% else %}
