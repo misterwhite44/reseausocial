@@ -19,12 +19,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
 #[Route('/compte')]
 class CompteController extends AbstractController
 {
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
+
+    {
+        $this->authorizationChecker = $authorizationChecker;
+    }
+
+
     #[Route('/', name: 'app_compte_index', methods: ['GET'])]
     public function index(CompteRepository $compteRepository): Response
     {
@@ -149,13 +157,25 @@ class CompteController extends AbstractController
     #[Route('/{id}', name: 'app_compte_delete', methods: ['POST'])]
     public function delete(Request $request, Compte $compte, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$compte->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($compte);
-            $entityManager->flush();
+        // Récupérer l'utilisateur connecté
+        $user = $this->getUser();
+
+        // Vérifier si l'utilisateur connecté est le propriétaire du compte à supprimer
+        if ($user === $compte) {
+            // Vérifier si le jeton CSRF est valide
+            if ($this->isCsrfTokenValid('delete'.$compte->getId(), $request->request->get('_token'))) {
+                $entityManager->remove($compte);
+                $entityManager->flush();
+            }
+        } else {
+            // Rediriger avec un message d'erreur ou renvoyer une réponse d'erreur
+            // Selon vos besoins
+            return $this->redirectToRoute('app_compte_index', [], Response::HTTP_FORBIDDEN);
         }
 
         return $this->redirectToRoute('app_compte_index', [], Response::HTTP_SEE_OTHER);
     }
+
 
     // Je veux créer une route pour s'abonner à un compte
     #[Route('/subscribe/{id}', name: 'app_subscribe')]
@@ -316,6 +336,7 @@ class CompteController extends AbstractController
             'publications' => $publications, // Passer les publications à la vue
         ]);
     }
+
 
 
 }
