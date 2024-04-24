@@ -1,0 +1,14 @@
+{# templates/etablissement/associate.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Associate{% endblock %}
+
+{% block body %}
+    <h1>Associate to an Etablissement</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.etablissement) }}
+    <button type="submit">Associate</button>
+    {{ form_end(form) }}
+{% endblock %}

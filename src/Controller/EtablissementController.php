@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 
 #[Route('/etablissement')]
 class EtablissementController extends AbstractController
@@ -211,38 +213,36 @@ class EtablissementController extends AbstractController
         return $this->redirectToRoute('app_etablissement_show', ['id' => $id]);
     }
 
+
+    //associer un etablissement sur le bouton associate
+
     #[Route('/etablissement-associate/{id}', name: 'app_etablissement_associate')]
-    public function associate($id, EntityManagerInterface $em, UserInterface $user, Etablissement $etablissement): Response
+    public function associate($id, EntityManagerInterface $em, UserInterface $user): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $compte = $user;
+
+        $compteToAssociate = $em->getRepository(Compte::class)->find($compte);
+
+        if (!$compteToAssociate) {
+            throw $this->createNotFoundException('Compte non trouvé');
+        }
+
+        $etablissement = $em->getRepository(Etablissement::class)->find($id);
 
         if (!$etablissement) {
             throw $this->createNotFoundException('Etablissement non trouvé');
         }
 
-        // Vérifier si l'utilisateur est déjà associé à l'établissement
-        $associated = $em->getRepository(Compte::class)->findOneBy([
-            'user_id' => $user->getId(),
-            'etablissement_id' => $etablissement->getId()
-        ]);
+        $compteToAssociate->setEtablissementId($etablissement);
 
-        if ($associated) {
-            // L'utilisateur est déjà associé à cet établissement
-            // Vous pouvez choisir de rediriger vers une page appropriée ou afficher un message d'erreur
-            // Dans cet exemple, je redirige simplement vers la page de l'établissement
-            return $this->redirectToRoute('app_etablissement_show', ['id' => $etablissement->getId()]);
-        }
-
-        // Créer un nouvel objet Compte et l'associer à l'utilisateur et à l'établissement
-        $compte = new Compte();
-        $compte->setUser($user);
-        $compte->setEtablissement($etablissement);
-
-        $em->persist($compte);
+        $em->persist($compteToAssociate);
         $em->flush();
 
-        return $this->redirectToRoute('app_etablissement_show', ['id' => $etablissement->getId()]);
+        return $this->redirectToRoute('app_etablissement_show', ['id' => $id]);
     }
+
 
 
 }
