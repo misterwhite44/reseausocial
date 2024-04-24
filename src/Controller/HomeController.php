@@ -152,7 +152,6 @@ class HomeController extends AbstractController
 // Ajouter la durée du retard à l'heure actuelle
         $dureeRetard = $request->request->get('duree_retard');
         $tempsRetard = new \DateTime();
-        $tempsRetard->add(new \DateInterval('PT' . $dureeRetard . 'M')); // 'PT' indique une période de temps, 'M' indique des minutes
 
         $post->setTempsRetard($tempsRetard);
         $post->setCompteId($this->getUser());
@@ -168,6 +167,7 @@ class HomeController extends AbstractController
         // Rediriger l'utilisateur vers une page de confirmation ou une autre page appropriée
         return $this->redirectToRoute('app_home');
     }
+
 
 
     #[Route('/modify-post/{id}', name:'app_modify_post')]
