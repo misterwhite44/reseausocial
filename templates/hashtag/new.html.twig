@@ -1,0 +1,14 @@
+{# templates/hashtag/new.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un hashtag{% endblock %}
+
+{% block body %}
+    <h1>Créer un hashtag</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.texte) }}
+    <button type="submit">Créer</button>
+    {{ form_end(form) }}
+{% endblock %}

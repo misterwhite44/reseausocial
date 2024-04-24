@@ -171,10 +171,14 @@ class HomeController extends AbstractController
 
 
     #[Route('/modify-post/{id}', name:'app_modify_post')]
-
     public function modifyPost(Request $request, EntityManagerInterface $em, Post $post): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
+
+        // Vérifiez si l'utilisateur actuel est celui qui a créé la publication
+        if ($this->getUser() !== $post->getCompteId()) {
+            throw $this->createAccessDeniedException('Vous n\'avez pas le droit de modifier ce post.');
+        }
 
         // Créer un formulaire pour modifier le post
         $form = $this->createForm(ModifyPostType::class, $post);
@@ -192,8 +196,6 @@ class HomeController extends AbstractController
         return $this->render('home/modif_post.html.twig', [
             'form' => $form->createView(),
             'post' => $post, // Passer l'objet $post au modèle Twig
-
-
         ]);
     }
 

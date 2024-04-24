@@ -33,9 +33,12 @@
                         <p>{{ publication.description }}</p>
                         <p>Durée du retard : {{ publication.tempsRetard|date('H:i') }}</p>
 
-                        <a href="{{ path('app_modify_post', {'id': publication.id}) }}" class="btn btn-primary">Modifier</a>
+                        {% if publication.compteId == app.user %}
+                            <a href="{{ path('app_modify_post', {'id': publication.id}) }}" class="btn btn-primary">Modifier</a>
+                        {% endif %}
                         <button type="button" class="btn btn-success like-btn" data-post-id="{{ publication.id }}">
-                            <i class="fas fa-thumbs-up"></i> Like <span class="like-count">0</span>
+
+                        <i class="fas fa-thumbs-up"></i> Like <span class="like-count">0</span>
                         </button>
                         <button type="button" class="btn btn-warning super-like-btn" data-post-id="{{ publication.id }}">
                             <i class="fas fa-star"></i> Super Like <span class="super-like-count">0</span>
