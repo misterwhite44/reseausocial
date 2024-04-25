@@ -94,7 +94,7 @@
                             {% endif %}
                         {% endif %}
                         <a href="{{ path('app_compte_abonnements', {'id': compte.id}) }}" class="btn btn-primary">Abonnements</a>
-                        <a href="{{ path('app_etablissement_associate', {'id': compte.id}) }}" class="btn btn-primary">Associer à un établissement</a>
+                        <a href="{{ path('app_etablissement_index') }}" class="btn btn-primary">Associer à un établissement</a>
                         {% if app.user is not null and app.user.id == compte.id %}
                             <a href="{{ path('app_compte_edit', {'id': compte.id}) }}" class="btn btn-primary">Modifier le profil</a>
                         {% endif %}

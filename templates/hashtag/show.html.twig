@@ -1,0 +1,19 @@
+{# templates/hashtag/show.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Hashtags{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Liste des Hashtags</h1>
+        <ul>
+            {% for hashtag in hashtags %}
+                <li>{{ hashtag.texte }}</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Bouton de retour vers le menu -->
+        <a href="{{ path('app_home') }}" class="btn btn-primary">Retour au Menu</a>
+    </div>
+{% endblock %}
