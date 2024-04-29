@@ -5,7 +5,9 @@
 {% block body %}
     <div class="container">
         <h1>Créer un retard</h1>
+        <!-- Formulaire de création de retard -->
         <form action="{{ path('app_create_post') }}" method="post">
+            <!-- Champs pour le titre, la description et la durée du retard -->
             <div class="form-group">
                 <label for="titre">Titre :</label>
                 <input type="text" id="titre" name="titre" class="form-control">
@@ -17,7 +19,6 @@
                 <textarea id="#" name="#" class="form-control"></textarea>
                 <label for="duree_retard">Durée du retard (en minutes) :</label>
                 <input type="number" id="duree_retard" name="duree_retard" class="form-control">
-
             </div>
             <button type="submit" class="btn btn-primary">Créer</button>
         </form>
@@ -25,46 +26,51 @@
         <br>
         <br>
         <h1>Publications</h1>
+        <!-- Liste des publications -->
         {% if publications %}
             <ul class="list-group">
                 {% for publication in publications %}
-                    <br>
-                    <br>
-                    <br>
-
                     <li class="list-group-item">
                         <h4>{{ publication.titre }}</h4>
                         <p>{{ publication.description }}</p>
                         <p>Durée du retard : {{ publication.tempsRetard|date('H:i') }}</p>
 
-                        {% if publication.compteId == app.user %}
-                            <a href="{{ path('app_modify_post', {'id': publication.id}) }}" class="btn btn-primary">Modifier</a>
-                        {% endif %}
-                        <button type="button" class="btn btn-success like-btn" data-post-id="{{ publication.id }}">
+                        <!-- Bouton Like -->
+                        <div class="btn-group" role="group">
+                            <form action="{{ path('app_like_post', {'id': publication.id}) }}" method="post">
+                                <button type="submit" class="btn btn-success like-btn" data-post-id="{{ publication.id }}">
+                                    <i class="fas fa-thumbs-up"></i> Like <span class="like-count">{{ likesCount[publication.id]|default(0) }}</span>
+                                </button>
+                            </form>
 
-                        <i class="fas fa-thumbs-up"></i> Like <span class="like-count">0</span>
-                        </button>
-                        <button type="button" class="btn btn-warning super-like-btn" data-post-id="{{ publication.id }}">
-                            <i class="fas fa-star"></i> Super Like <span class="super-like-count">0</span>
-                        </button>
+                            <!-- Bouton Super Like -->
+                            <form action="{{ path('app_home', {'id': publication.id}) }}" method="post">
+                                <button type="submit" class="btn btn-warning super-like-btn" data-post-id="{{ publication.id }}">
+                                    <i class="fas fa-star"></i> Super Like <span class="super-like-count">0</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Formulaire pour ajouter un commentaire -->
                         <form action="{{ path('app_add_comment', {'id': publication.id}) }}" method="post">
                             <label for="commentaire">Commentaire :</label>
                             <textarea id="commentaire" name="commentaire" class="form-control"></textarea>
                             <button type="submit" class="btn btn-primary">Ajouter un commentaire</button>
                         </form>
+
+                        <!-- Formulaire pour signaler la publication -->
                         <form action="{{ path('app_signalement', {'id': publication.id}) }}" method="post">
                             <label for="motif">Motif du signalement :</label>
                             <textarea id="motif" name="motif" class="form-control"></textarea>
                             <button type="submit" class="btn btn-warning super-like-btn" data-post-id="{{ publication.id }}">
                                 <i class="fas fa-star"></i> Signaler <span class="signalement-count">{{ signalementsCount[publication.id]|default(0) }}</span>
                             </button>
-                            {% if publication.compteId == compte %}
-                                <a href="{{ path('app_delete_post', {'id': publication.id}) }}" class="btn btn-danger">Supprimer</a>
-                            {% endif %}
                         </form>
 
-
-
+                        <!-- Bouton pour supprimer la publication (si l'utilisateur est l'auteur) -->
+                        {% if publication.compteId == compte %}
+                            <a href="{{ path('app_delete_post', {'id': publication.id}) }}" class="btn btn-danger">Supprimer</a>
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>
@@ -72,7 +78,6 @@
             <p class="lead">Aucune publication disponible.</p>
         {% endif %}
     </div>
-
     <!-- Inclure la bibliothèque Font Awesome -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 

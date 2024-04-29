@@ -27,7 +27,7 @@ class Like
 
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: false)]
     #[Groups(['like:list', 'like:item'])]
 
     private ?bool $golden = null;
