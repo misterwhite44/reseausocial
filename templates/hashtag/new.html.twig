@@ -7,7 +7,7 @@
 {% block body %}
     <h1>Créer un hashtag</h1>
 
-    {{ form_start(form) }}
+    {{ form_start(form, {'action': path('create_hashtag')}) }}
     {{ form_row(form.texte) }}
     <button type="submit">Créer</button>
     {{ form_end(form) }}
