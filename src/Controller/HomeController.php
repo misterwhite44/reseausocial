@@ -42,6 +42,13 @@ class HomeController extends AbstractController
             $signalements = $em->getRepository(Signalement::class)->findBy(['post_id' => $publication->getId()]);
             $signalementsCount[$publication->getId()] = count($signalements);
         }
+        // Récupérer les publications avec leurs commentaires associés
+        $publicationsWithComments = [];
+        foreach ($publications as $publication) {
+            $comments = $em->getRepository(Commentaire::class)->findBy(['post_id' => $publication]);
+            $publicationsWithComments[$publication->getId()] = ['publication' => $publication, 'comments' => $comments];
+        }
+
 
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',

@@ -32,7 +32,7 @@ class Commentaire
 
     private ?string $texte = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['commentaire:list', 'commentaire:item'])]
 
     private ?\DateTimeInterface $date = null;
