@@ -21,6 +21,21 @@ class CommentaireRepository extends ServiceEntityRepository
         parent::__construct($registry, Commentaire::class);
     }
 
+    //findComptePlusCommentaire
+
+    public function findComptePlusCommentaire(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c.compteId, COUNT(c.id) as nbCommentaires')
+            ->groupBy('c.compteId')
+            ->orderBy('nbCommentaires', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
 //    /**
 //     * @return Commentaire[] Returns an array of Commentaire objects
 //     */

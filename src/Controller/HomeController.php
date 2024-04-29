@@ -20,6 +20,7 @@ use App\Entity\Commentaire;
 use App\Form\CommentaireType;
 use App\Entity\Signalement;
 use App\Entity\Like;
+use DateTime;
 
 
 
@@ -207,6 +208,7 @@ class HomeController extends AbstractController
         ]);
     }
 
+
     #[Route('/add-comment/{id}', name: 'app_add_comment')]
     public function addComment(Request $request, EntityManagerInterface $em, Post $post): Response
     {
@@ -221,6 +223,10 @@ class HomeController extends AbstractController
         if ($commentaireForm->isSubmitted() && $commentaireForm->isValid()) {
             // Associer le commentaire à la publication actuelle
             $commentaire->setPostId($post);
+
+            // Définir la date de création du commentaire
+            $currentDate = new DateTime();
+            $commentaire->setCreatedAt($currentDate);
 
             // Associer le commentaire à l'utilisateur connecté
             $commentaire->setCompteId($this->getUser());
@@ -239,6 +245,7 @@ class HomeController extends AbstractController
             'post' => $post, // Passer le post à Twig
         ]);
     }
+
 
     #[Route('/like/{id}', name: 'app_like_post')]
     public function likePost(Request $request, EntityManagerInterface $em, Post $post): Response
@@ -269,18 +276,7 @@ class HomeController extends AbstractController
         return new JsonResponse(['success' => true]);
     }
 
-    #[Route('/post/{id}/comments', name: 'app_show_comments')]
-    public function showComments(EntityManagerInterface $em, Post $post): Response
-    {
-        // Récupère les commentaires liés au post spécifié
-        $comments = $em->getRepository(Commentaire::class)->findBy(['post_id' => $post]);
 
-        // Retourne une réponse avec les commentaires
-        return $this->render('home/index.html.twig', [
-            'post' => $post,
-            'comments' => $comments,
-        ]);
-    }
     #[Route('/signalement/{id}', name: 'app_signalement')]
     public function signalerPost(Request $request, EntityManagerInterface $em, Post $post): Response
     {

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\DTO\Periode_DTO;
 use App\Repository\CompteRepository;
 use App\Repository\PostRepository;
+use App\Repository\CommentaireRepository;
 use App\Repository\AbonnementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,11 +21,13 @@ class ApiController extends AbstractController
     private PostRepository $postRepository;
     private AbonnementRepository $AbonnementRepository; // Add AbonnementRepository
 
-    public function __construct(CompteRepository $compteRepository, PostRepository $postRepository, AbonnementRepository $AbonnementRepository)
+    private CommentaireRepository $CommentaireRepository; // Add CommentaireRepository
+    public function __construct(CompteRepository $compteRepository, PostRepository $postRepository, AbonnementRepository $AbonnementRepository, CommentaireRepository $CommentaireRepository)
     {
         $this->compteRepository = $compteRepository;
         $this->postRepository = $postRepository;
         $this->AbonnementRepository = $AbonnementRepository; // Assign AbonnementRepository
+        $this->CommentaireRepository = $CommentaireRepository; // Assign CommentaireRepository
     }
 
     #[Route('/GetNombreCreationsCompte', name: 'app_api_compte', methods: ['POST'])]
@@ -133,4 +136,51 @@ class ApiController extends AbstractController
         // Return all Compte as JSON response
         return $this->json($allCompte);
     }
+
+    //je veux l'affichage de tout les commentaires
+
+    #[Route('/GetAllCommentaire', name: 'app_api_allcommentaire', methods: ['POST'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Successful response',
+        content: new OA\JsonContent(
+            type: 'object'
+        )
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new Model(type: Periode_DTO::class),
+    )]
+    public function GetAllCommentaire(Periode_DTO $periode_DTO): Response
+    {
+        // Fetch all Commentaire entities
+        $allCommentaire = $this->CommentaireRepository->findAll();
+
+        // Return all Commentaire as JSON response
+        return $this->json($allCommentaire);
+    }
+
+//get compte qui poste le plus de publications
+    #[Route('/GetComptePlusPubliant', name: 'app_api_compte_plus_publiant', methods: ['POST'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Successful response',
+        content: new OA\JsonContent(
+            type: 'object'
+        )
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: new Model(type: Periode_DTO::class),
+    )]
+    public function GetComptePlusPubliant(Periode_DTO $periode_DTO): Response
+    {
+        // Fetch the compte with the most posts
+        $comptePlusPubliant = $this->compteRepository->findCompteWithMostPosts();
+
+        // Return the compte with the most posts as JSON response
+        return $this->json($comptePlusPubliant);
+    }
+
+
 }

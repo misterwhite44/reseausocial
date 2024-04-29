@@ -36,6 +36,21 @@ class Commentaire
     #[Groups(['commentaire:list', 'commentaire:item'])]
 
     private ?\DateTimeInterface $date = null;
+    public function __construct()
+    {
+        $this->date = new \DateTime(); // Initialise la date de création à la date actuelle lors de la création de l'entité
+    }
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
