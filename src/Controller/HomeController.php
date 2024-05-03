@@ -59,6 +59,25 @@ class HomeController extends AbstractController
             'signalementsCount' => $signalementsCount, // Passer le nombre de signalements à Twig
         ]);
     }
+    #[Route('/upgrade-to-admin/{id}', name: 'app_upgrade_to_admin')]
+    public function upgradeToAdmin(EntityManagerInterface $em, Compte $compte): Response
+    {
+        // Vérifiez si l'utilisateur actuel est autorisé à effectuer cette action
+        if (!$this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Vous n\'avez pas le droit de modifier les rôles.');
+        }
+
+        // Mettez à jour les rôles de l'utilisateur pour inclure ROLE_ADMIN
+        $roles = $compte->getRoles();
+        $roles[] = 'ROLE_ADMIN';
+        $compte->setRoles(array_unique($roles));
+
+        // Enregistrez les modifications dans la base de données
+        $em->flush();
+
+        // Redirigez l'utilisateur vers une page de confirmation ou une autre page appropriée
+        return $this->redirectToRoute('app_home');
+    }
 
 
 
@@ -182,6 +201,7 @@ class HomeController extends AbstractController
     #[Route('/modify-post/{id}', name:'app_modify_post')]
     public function modifyPost(Request $request, EntityManagerInterface $em, Post $post): Response
     {
+
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         // Vérifiez si l'utilisateur actuel est celui qui a créé la publication
