@@ -50,12 +50,21 @@ class HomeController extends AbstractController
             $comments = $em->getRepository(Commentaire::class)->findBy(['post_id' => $publication]);
             $publicationsWithComments[$publication->getId()] = ['publication' => $publication, 'comments' => $comments];
         }
+// Récupérer les publications avec leurs commentaires associés
+        $publicationsWithComments = [];
+        $publications = $em->getRepository(Post::class)->findBy([], ['date' => 'DESC']);
 
+        foreach ($publications as $publication) {
+            $comments = $em->getRepository(Commentaire::class)->findBy(['post_id' => $publication]);
+            $publicationsWithComments[] = ['publication' => $publication, 'commentaires' => $comments];
+        }
 
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'compte' => $compte,
             'publications' => $publications,
+            'publicationsWithComments' => $publicationsWithComments,
+
             'signalementsCount' => $signalementsCount, // Passer le nombre de signalements à Twig
         ]);
     }
@@ -165,28 +174,35 @@ class HomeController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
+        $compte = $this->getUser();
+
+        // Récupérer les hashtags existants
+        $hashtags = $em->getRepository(Hashtag::class)->findAll();
+
         // Récupérer les données soumises
         $titre = $request->request->get('titre');
         $description = $request->request->get('description');
         $dureeRetard = $request->request->get('duree_retard'); // Récupérer la durée du retard depuis le formulaire
+        $selectedHashtags = $request->request->get('hashtags', []); // Récupérer les hashtags sélectionnés
 
-        // Créer une nouvelle publication
         // Créer une nouvelle publication
         $post = new Post();
         $post->setTitre($titre);
         $post->setDescription($description);
         $post->setDate(new \DateTime());
 
-// Ajouter la durée du retard à l'heure actuelle
-        $dureeRetard = $request->request->get('duree_retard');
+        // Ajouter la durée du retard à l'heure actuelle
         $tempsRetard = new \DateTime();
-
         $post->setTempsRetard($tempsRetard);
         $post->setCompteId($this->getUser());
 
-
-
-
+        // Associer les hashtags sélectionnés à la publication
+        foreach ($selectedHashtags as $hashtagId) {
+            $hashtag = $em->getRepository(Hashtag::class)->find($hashtagId);
+            if ($hashtag) {
+                $post->addHashtag($hashtag);
+            }
+        }
 
         // Enregistrer la publication
         $em->persist($post);
@@ -195,6 +211,8 @@ class HomeController extends AbstractController
         // Rediriger l'utilisateur vers une page de confirmation ou une autre page appropriée
         return $this->redirectToRoute('app_home');
     }
+
+
 
 
 
