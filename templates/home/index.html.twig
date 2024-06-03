@@ -20,15 +20,14 @@
                 <input type="number" id="duree_retard" name="duree_retard" class="form-control">
             </div>
             <div class="form-group">
-                <label for="hashtags">Choisir des # :</label>
-                <select id="hashtags" name="hashtags[]" class="form-control" multiple>
-                    <option value="">Sélectionner des #</option>
+                <label for="hashtags">Choisir un # :</label>
+                <select id="hashtags" name="hashtags[]" class="form-control">
+                    <option value="">Sélectionner un #</option>
                     <option value="#Important">#Important</option>
                     <option value="#Urgent">#Urgent</option>
                     <option value="#Meeting">#Meeting</option>
                     <option value="#Client">#Client</option>
                     <option value="#Project">#Project</option>
-                    <!-- Ajoutez d'autres options de hashtags prédéfinis ici -->
                 </select>
             </div>
 
@@ -65,16 +64,42 @@
                                 </button>
                             </form>
                         </div>
-                            
+
+                            {% for item in publicationsWithComments %}
+                                {% set publication = item.publication %}
+                                <div>
+
+
+                                    <!-- Affichage des commentaires -->
+                                    <div class="mt-3">
+                                        <h5>Commentaires :</h5>
+                                        {% if item.commentaires is not empty %}
+                                            <ul class="list-unstyled">
+                                                {% for commentaire in item.commentaires %}
+                                                    <li>
+                                                        <p><strong>{{ commentaire.compteId.username }}</strong> - {{ commentaire.date|date('d/m/Y H:i') }}</p>
+                                                        <p>{{ commentaire.texte }}</p>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <p>Aucun commentaire pour le moment.</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+
+                        </div>
+                            <form action="{{ path('app_add_comment', {'id': publication.id}) }}" method="post">
+                                <label for="commentaire">Commentaire :</label>
+                                <textarea id="commentaire" name="commentaire" class="form-control"></textarea>
+                                <button type="submit" class="btn btn-primary">Ajouter un commentaire</button>
+                            </form>
                             <form action="{{ path('app_modify_post', {'id': publication.id}) }}" method="post">
                                 <button type="submit" class="btn btn-primary">Modifier</button>
 
-                        <!-- Formulaire pour ajouter un commentaire -->
-                        <form action="{{ path('app_add_comment', {'id': publication.id}) }}" method="post">
-                            <label for="commentaire">Commentaire :</label>
-                            <textarea id="commentaire" name="commentaire" class="form-control"></textarea>
-                            <button type="submit" class="btn btn-primary">Ajouter un commentaire</button>
-                        </form>
+
 
                         <!-- Formulaire pour signaler la publication -->
                         <form action="{{ path('app_signalement', {'id': publication.id}) }}" method="post">
