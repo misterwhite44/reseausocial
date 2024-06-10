@@ -29,8 +29,8 @@ class Abonnement
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['abonnement:list', 'abonnement:item'])]
+    private ?Compte $suiveur_id = null;
 
-    private ?compte $suiveur_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'abonnements')]
     #[Groups(['abonnement:list', 'abonnement:item'])]

@@ -183,7 +183,6 @@ class HomeController extends AbstractController
         $titre = $request->request->get('titre');
         $description = $request->request->get('description');
         $dureeRetard = $request->request->get('duree_retard'); // Récupérer la durée du retard depuis le formulaire
-        $selectedHashtags = $request->request->get('hashtags', []); // Récupérer les hashtags sélectionnés
 
         // Créer une nouvelle publication
         $post = new Post();
@@ -196,13 +195,7 @@ class HomeController extends AbstractController
         $post->setTempsRetard($tempsRetard);
         $post->setCompteId($this->getUser());
 
-        // Associer les hashtags sélectionnés à la publication
-        foreach ($selectedHashtags as $hashtagId) {
-            $hashtag = $em->getRepository(Hashtag::class)->find($hashtagId);
-            if ($hashtag) {
-                $post->addHashtag($hashtag);
-            }
-        }
+
 
         // Enregistrer la publication
         $em->persist($post);
